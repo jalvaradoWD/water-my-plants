@@ -1,30 +1,46 @@
 import type { NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import client from '../lib/prismadb';
 
-const Home: NextPage = () => {
+const SplashPage: NextPage = () => {
+  const router = useRouter();
+  const [userAuth, setUserAuth] = useState<
+    'authenticate' | 'loading' | 'unauthenticated'
+  >('loading');
+
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      console.log('User is unauthenticated');
+      setUserAuth('unauthenticated');
     },
   });
 
-  return (
-    <>
-      <div className="flex flex-col text-center gap-4 h-screen items-center justify-center">
-        <div>
-          <h1 className="text-3xl text-green-600 font-bold capitalize">
-            Water my plants 🌿
-          </h1>
+  if (status === 'authenticated') {
+    router.push('/home');
+  }
 
-          <p>Get yourself signed up with my cool application</p>
+  if (userAuth === 'loading') {
+    return <h1>Loading...</h1>;
+  } else {
+    return (
+      <>
+        <div className="flex flex-col text-center gap-4 h-screen items-center justify-center">
+          <div>
+            <h1 className="text-3xl text-green-600 font-bold capitalize">
+              Water my plants 🌿
+            </h1>
+
+            <p>Get yourself signed up with my cool application</p>
+          </div>
+          <button className="button mb-2" onClick={() => signIn('google')}>
+            Sign In with Google
+          </button>
         </div>
-        <button className="button mb-2" onClick={() => signIn('google')}>
-          Sign In with Google
-        </button>
-      </div>
-    </>
-  );
+      </>
+    );
+  }
 };
 
-export default Home;
+export default SplashPage;
