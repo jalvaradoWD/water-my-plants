@@ -2,7 +2,6 @@ import type { NextPage } from 'next';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import client from '../lib/prismadb';
 
 const SplashPage: NextPage = () => {
   const router = useRouter();
@@ -29,7 +28,7 @@ const SplashPage: NextPage = () => {
         <div className="flex flex-col text-center gap-4 h-screen items-center justify-center">
           <div>
             <h1 className="text-3xl text-green-600 font-bold capitalize">
-              Water my plants 🌿
+              🌿 Water my plants 🌿
             </h1>
 
             <p>Get yourself signed up with my cool application</p>
